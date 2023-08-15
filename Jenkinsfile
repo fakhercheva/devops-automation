@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-        stage('build Maven') {
+        stage('Hello') {
             steps {
                 echo 'hello'
             }
