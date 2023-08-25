@@ -7,6 +7,22 @@ pipeline {
                 echo 'Hello checkout SCM'
             }
         }
+     post {
+        success {
+            emailext(
+                subject: "Build Success - ${currentBuild.fullDisplayName}",
+                body: "The build ${currentBuild.fullDisplayName} succeeded.",
+                to: 'fakher.mekki@sesame.com.tn',
+                cc: '',
+                bcc: '',
+                replyTo: '',
+                mimeType: 'text/plain'
+            )
+        }
+        failure {
+            // Actions to take in case of build failure
+        }
+    }        
 
         stage('Build') {
             steps {
