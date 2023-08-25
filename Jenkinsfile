@@ -1,45 +1,47 @@
 pipeline {
     agent any
-
     stages {
-        stage('SCM checkout') {
+        stage('Checkout') {
             steps {
-                echo 'Hello checkout SCM'
+                // Checkout your source code from your version control system
+                // Example: checkout([$class: 'GitSCM', branches: [[name: 'main']], userRemoteConfigs: [[url: 'https://github.com/fakhercheva/devops-automation.git']]])
             }
         }
-     post {
-        success {
-            emailext(
-                subject: "Build Success - ${currentBuild.fullDisplayName}",
-                body: "The build ${currentBuild.fullDisplayName} succeeded.",
-                to: 'fakher.mekki@sesame.com.tn',
-                cc: '',
-                bcc: '',
-                replyTo: '',
-                mimeType: 'text/plain'
-            )
-        }
-        failure {
-            // Actions to take in case of build failure
-        }
-    }        
-
         stage('Build') {
             steps {
-                echo 'Build completed'
+                // Build your project here
+                echo 'build start'
             }
         }
-
-        stage('Test') {
-            steps {
-                echo 'Test completed'
-                bat "\"C:\\Program Files\\Git\\bin\\bash.exe\" -c 'date'"
+        // Add more stages as needed for your specific pipeline
+    }
+    post {
+        success {
+            script {
+                // Email notification for a successful build
+                emailext(
+                    subject: "Build Success - ${currentBuild.fullDisplayName}",
+                    body: "The build ${currentBuild.fullDisplayName} succeeded.",
+                    to: 'fakher.mekki@sesame.com.tn',
+                    cc: '',
+                    bcc: '',
+                    replyTo: '',
+                    mimeType: 'text/plain'
+                )
             }
         }
-
-          stage('Deploy') {
-            steps {
-                echo 'Deploy completed'
+        failure {
+            script {
+                // Email notification for a failed build
+                emailext(
+                    subject: "Build Failure - ${currentBuild.fullDisplayName}",
+                    body: "The build ${currentBuild.fullDisplayName} failed. See the Jenkins console output for details.",
+                    to: 'fakher.mekki@sesame.com.tn',
+                    cc: '',
+                    bcc: '',
+                    replyTo: '',
+                    mimeType: 'text/plain'
+                )
             }
         }
     }
